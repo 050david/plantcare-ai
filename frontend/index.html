@@ -10,24 +10,25 @@
 </head>
 <body>
 
+  <!-- HERO WRAPPER WITH BACKGROUND IMAGE -->
   <div class="hero-wrapper">
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-dark">
+    <nav class="navbar navbar-dark" style="position:relative; z-index:1050;">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="#">
           <i class="bi bi-leaf-fill" style="color: var(--green-mid);"></i>
           <span>PlantCare <span style="color: var(--green-mid);">AI</span></span>
         </a>
-        <div class="dropdown ms-auto">
-          <button class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+        <div class="dropdown ms-auto" style="position:relative; z-index:1051;">
+          <button class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person me-1"></i><span id="navUsername"></span>
           </button>
-          <ul class="dropdown-menu dropdown-menu-end">
+          <ul class="dropdown-menu dropdown-menu-end" style="z-index:1052;">
             <li><a class="dropdown-item" href="history.html"><i class="bi bi-clock-history me-2"></i>History</a></li>
             <li id="adminLink" class="d-none"><a class="dropdown-item" href="admin.html"><i class="bi bi-shield-check me-2"></i>Admin</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="logout(); return false;"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
           </ul>
         </div>
       </div>
@@ -79,122 +80,118 @@
       </div>
     </section>
 
-  </div>
+  </div><!-- end hero-wrapper -->
 
   <!-- MAIN CONTENT -->
   <main class="section-lift">
     <div class="container">
-    <div class="row justify-content-center g-4">
+      <div class="row justify-content-center g-4">
 
-      <!-- UPLOAD CARD -->
-      <div class="col-lg-5 fade-up-delay-1">
-        <div class="card h-100">
-          <div class="card-body p-4">
-            <h5 class="card-title mb-4"><i class="bi bi-upload me-2" style="color:var(--green-mid);"></i>Upload Leaf Image</h5>
+        <!-- UPLOAD CARD -->
+        <div class="col-lg-5 fade-up-delay-1">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <h5 class="card-title mb-4"><i class="bi bi-upload me-2" style="color:var(--green-mid);"></i>Upload Leaf Image</h5>
 
-            <div class="drop-zone mb-4" id="dropZone">
-              <div class="drop-zone-content" id="dropZoneContent">
-                <i class="bi bi-image mb-3 d-block" style="font-size:2.5rem; color:var(--green-mid);"></i>
-                <p class="mb-1 fw-medium" style="font-size:0.92rem;">Drag & drop your image here</p>
-                <p class="mb-3" style="font-size:0.82rem; color:var(--muted);">or click to browse</p>
-               <label for="fileInput" class="btn btn-outline-success btn-sm">
-  Choose Image
-</label>
+              <div class="drop-zone mb-4" id="dropZone">
+                <div class="drop-zone-content" id="dropZoneContent">
+                  <i class="bi bi-image mb-3 d-block" style="font-size:2.5rem; color:var(--green-mid);"></i>
+                  <p class="mb-1 fw-medium" style="font-size:0.92rem;">Drag & drop your image here</p>
+                  <p class="mb-3" style="font-size:0.82rem; color:var(--muted);">or click to browse</p>
+                  <button class="btn btn-outline-success btn-sm" id="chooseBtn">Choose Image</button>
+                </div>
+                <img id="previewImg" class="preview-img d-none" alt="Preview" />
+              </div>
+
+              <input type="file" id="fileInput" accept="image/*" class="d-none" />
+
+              <button class="btn btn-outline-secondary w-100 mb-3" id="cameraBtn">
+                <i class="bi bi-camera me-2"></i>Take a Photo
+              </button>
+              <input type="file" id="cameraInput" accept="image/*" capture="environment" class="d-none" />
+
+              <button class="btn btn-success w-100 btn-lg" id="analyzeBtn" disabled>
+                <i class="bi bi-cpu me-2"></i>Analyze Plant
+              </button>
+
+              <p class="text-center mt-3 mb-0" style="font-size:0.75rem; color:var(--muted);">
+                <i class="bi bi-info-circle me-1"></i>
+                Supports <strong>Tomato, Potato, and Pepper</strong> leaves only
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESULTS CARD -->
+        <div class="col-lg-5 fade-up-delay-2">
+          <div class="card h-100">
+            <div class="card-body p-4">
+              <h5 class="card-title mb-4"><i class="bi bi-clipboard2-pulse me-2" style="color:var(--green-mid);"></i>Analysis Results</h5>
+
+              <div id="emptyState" class="text-center py-5">
+                <div class="mb-3" style="width:56px; height:56px; border-radius:50%; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; margin:0 auto;">
+                  <i class="bi bi-search" style="color:var(--muted); font-size:1.3rem;"></i>
+                </div>
+                <p style="color:var(--muted); font-size:0.88rem;">Upload a leaf image to see analysis results.</p>
+              </div>
+
+              <div id="loadingState" class="text-center py-5 d-none">
+                <div class="spinner-border mb-3" style="color:var(--green-mid);" role="status"></div>
+                <p style="color:var(--muted); font-size:0.88rem;">Analyzing your plant...</p>
+              </div>
+
+              <div id="resultsState" class="d-none">
+                <div id="unknownPlant" class="alert alert-danger d-none">
+                  <i class="bi bi-exclamation-circle me-2"></i>
+                  <strong>Plant not recognized.</strong> Please upload a <strong>Tomato, Potato, or Pepper</strong> leaf.
+                </div>
+
+                <div id="knownPlantResults">
+                  <div class="text-center mb-4">
+                    <span id="healthBadge" class="badge fs-6 px-3 py-2"></span>
+                  </div>
+
+                  <div class="result-item mb-3">
+                    <div class="result-label"><i class="bi bi-flower1 me-1"></i>Plant Species</div>
+                    <div class="result-value" id="plantName"></div>
+                  </div>
+
+                  <div class="result-item mb-3">
+                    <div class="result-label"><i class="bi bi-bug me-1"></i>Condition</div>
+                    <div class="result-value" id="diseaseName"></div>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-1">
+                      <small style="color:var(--muted); font-size:0.78rem;">Confidence</small>
+                      <small class="fw-bold" id="confidenceText" style="font-size:0.78rem;"></small>
+                    </div>
+                    <div class="progress" style="height: 7px;">
+                      <div class="progress-bar" id="confidenceBar" role="progressbar"></div>
+                    </div>
+                  </div>
+
+                  <div id="diseaseInfo" class="alert alert-warning d-none">
+                    <h6 class="alert-heading mb-2" style="font-size:0.85rem;"><i class="bi bi-exclamation-triangle me-2"></i>Disease Information</h6>
+                    <div id="diseaseInfoText" style="font-size:0.85rem;"></div>
+                  </div>
+
+                  <div id="healthyInfo" class="alert alert-success d-none" style="font-size:0.85rem;">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <strong>Great news!</strong> Your plant appears healthy. Keep up the good care!
+                  </div>
+                </div>
+
+                <button class="btn btn-outline-success w-100 mt-2" id="tryAgainBtn">
+                  <i class="bi bi-arrow-counterclockwise me-2"></i>Analyze Another
                 </button>
               </div>
-              <img id="previewImg" class="preview-img d-none" alt="Preview" />
+
             </div>
-
-
-            <button class="btn btn-outline-secondary w-100 mb-3" id="cameraBtn">
-              <i class="bi bi-camera me-2"></i>Take a Photo
-            </button>
-            <input type="file" id="fileInput" accept="image/*" class="d-none" />
-            <input type="file" id="fileInput" accept="image/*" class="d-none" />
-            <input type="file" id="cameraInput" accept="image/*" capture="environment" class="d-none" />
-
-            <button class="btn btn-success w-100 btn-lg" id="analyzeBtn" disabled>
-              <i class="bi bi-cpu me-2"></i>Analyze Plant
-            </button>
-
-            <p class="text-center mt-3 mb-0" style="font-size:0.75rem; color:var(--muted);">
-              <i class="bi bi-info-circle me-1"></i>
-              Supports <strong>Tomato, Potato, and Pepper</strong> leaves only
-            </p>
           </div>
         </div>
+
       </div>
-
-      <!-- RESULTS CARD -->
-      <div class="col-lg-5 fade-up-delay-2">
-        <div class="card h-100">
-          <div class="card-body p-4">
-            <h5 class="card-title mb-4"><i class="bi bi-clipboard2-pulse me-2" style="color:var(--green-mid);"></i>Analysis Results</h5>
-
-            <div id="emptyState" class="text-center py-5">
-              <div class="mb-3" style="width:56px; height:56px; border-radius:50%; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; margin:0 auto;">
-                <i class="bi bi-search" style="color:var(--muted); font-size:1.3rem;"></i>
-              </div>
-              <p style="color:var(--muted); font-size:0.88rem;">Upload a leaf image to see analysis results.</p>
-            </div>
-
-            <div id="loadingState" class="text-center py-5 d-none">
-              <div class="spinner-border mb-3" style="color:var(--green-mid);" role="status"></div>
-              <p style="color:var(--muted); font-size:0.88rem;">Analyzing your plant...</p>
-            </div>
-
-            <div id="resultsState" class="d-none">
-              <div id="unknownPlant" class="alert alert-danger d-none">
-                <i class="bi bi-exclamation-circle me-2"></i>
-                <strong>Plant not recognized.</strong> Please upload a <strong>Tomato, Potato, or Pepper</strong> leaf.
-              </div>
-
-              <div id="knownPlantResults">
-                <div class="text-center mb-4">
-                  <span id="healthBadge" class="badge fs-6 px-3 py-2"></span>
-                </div>
-
-                <div class="result-item mb-3">
-                  <div class="result-label"><i class="bi bi-flower1 me-1"></i>Plant Species</div>
-                  <div class="result-value" id="plantName"></div>
-                </div>
-
-                <div class="result-item mb-3">
-                  <div class="result-label"><i class="bi bi-bug me-1"></i>Condition</div>
-                  <div class="result-value" id="diseaseName"></div>
-                </div>
-
-                <div class="mb-4">
-                  <div class="d-flex justify-content-between mb-1">
-                    <small style="color:var(--muted); font-size:0.78rem;">Confidence</small>
-                    <small class="fw-bold" id="confidenceText" style="font-size:0.78rem;"></small>
-                  </div>
-                  <div class="progress" style="height: 7px;">
-                    <div class="progress-bar" id="confidenceBar" role="progressbar"></div>
-                  </div>
-                </div>
-
-                <div id="diseaseInfo" class="alert alert-warning d-none">
-                  <h6 class="alert-heading mb-2" style="font-size:0.85rem;"><i class="bi bi-exclamation-triangle me-2"></i>Disease Information</h6>
-                  <div id="diseaseInfoText" style="font-size:0.85rem;"></div>
-                </div>
-
-                <div id="healthyInfo" class="alert alert-success d-none" style="font-size:0.85rem;">
-                  <i class="bi bi-check-circle me-2"></i>
-                  <strong>Great news!</strong> Your plant appears healthy. Keep up the good care!
-                </div>
-              </div>
-
-              <button class="btn btn-outline-success w-100 mt-2" id="tryAgainBtn">
-                <i class="bi bi-arrow-counterclockwise me-2"></i>Analyze Another
-              </button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
     </div>
   </main>
 
