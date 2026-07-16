@@ -27,10 +27,6 @@ const diseaseInfo = {
 fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
 cameraInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
 cameraBtn.addEventListener('click', () => cameraInput.click());
-dropZone.addEventListener('click', () => {
-  if (!previewImg.classList.contains('d-none')) return;
-  fileInput.click();
-});
 
 // --- Drag and Drop ---
 dropZone.addEventListener('dragover', (e) => {
@@ -43,6 +39,10 @@ dropZone.addEventListener('drop', (e) => {
   dropZone.classList.remove('dragover');
   const file = e.dataTransfer.files[0];
   if (file && file.type.startsWith('image/')) handleFile(file);
+});
+document.getElementById('chooseBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  fileInput.click();
 });
 
 function handleFile(file) {
