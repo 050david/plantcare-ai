@@ -48,3 +48,33 @@ Open http://localhost:3001 in your browser.
 - Drusilla Osei Takyiaw
 - Lemuel Ofosu-Adjei
 - Kennedy Okom
+
+## Windows Setup
+
+### Backend
+```bash
+git clone https://github.com/050david/plantcare-ai.git
+cd plantcare-ai/backend
+python -m venv venv
+venv\Scripts\activate
+pip install fastapi uvicorn tensorflow pillow python-multipart "python-jose[cryptography]" "passlib[bcrypt]==4.0.1" sqlalchemy "pydantic[email]"
+```
+
+Place `plantcare_weights.weights.h5` in the `backend/` folder (get from David).
+
+```bash
+uvicorn main:app --reload
+```
+
+### Frontend
+```bash
+cd frontend
+python -m http.server 3001
+```
+
+Open `http://localhost:3001` in your browser.
+
+### Notes
+- Use `python` instead of `python3`
+- Use `venv\Scripts\activate` instead of `source venv/bin/activate`
+- Use `uvicorn main:app --reload` instead of `./venv/bin/uvicorn main:app --reload`
