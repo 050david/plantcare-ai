@@ -1,5 +1,3 @@
-const API_URL = 'http://127.0.0.1:8000';
-
 const fileInput = document.getElementById('fileInput');
 const cameraInput = document.getElementById('cameraInput');
 const cameraBtn = document.getElementById('cameraBtn');
@@ -72,8 +70,16 @@ analyzeBtn.addEventListener('click', async () => {
   try {
     const response = await fetch(`${API_URL}/predict`, {
       method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`
+      },
       body: formData
     });
+
+    if (response.status === 401) {
+      logout();
+      return;
+    }
 
     if (!response.ok) throw new Error('Prediction failed');
     const data = await response.json();
@@ -113,7 +119,6 @@ function showResults(data) {
   document.getElementById('loadingState').classList.add('d-none');
   document.getElementById('resultsState').classList.remove('d-none');
 
-  // Health badge
   const badge = document.getElementById('healthBadge');
   if (data.is_healthy) {
     badge.textContent = '✅ Healthy Plant';
@@ -123,16 +128,13 @@ function showResults(data) {
     badge.className = 'badge bg-warning text-dark fs-6 px-3 py-2';
   }
 
-  // Plant and disease
   document.getElementById('plantName').textContent = data.plant;
   document.getElementById('diseaseName').textContent = data.disease;
 
-  // Confidence bar
   const confidence = data.confidence;
   document.getElementById('confidenceText').textContent = `${confidence}%`;
   document.getElementById('confidenceBar').style.width = `${confidence}%`;
 
-  // Disease or healthy info
   const diseaseInfoEl = document.getElementById('diseaseInfo');
   const healthyInfoEl = document.getElementById('healthyInfo');
   const diseaseInfoText = document.getElementById('diseaseInfoText');

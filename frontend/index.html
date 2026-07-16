@@ -17,6 +17,26 @@
         <i class="bi bi-leaf-fill text-success fs-4"></i>
         <span>PlantCare <span class="text-success">AI</span></span>
       </a>
+      <div class="d-flex align-items-center gap-3">
+        <a href="history.html" class="text-white text-decoration-none small">
+          <i class="bi bi-clock-history me-1"></i>History
+        </a>
+        <span id="adminLink" class="d-none">
+          <a href="admin.html" class="text-white text-decoration-none small">
+            <i class="bi bi-shield-check me-1"></i>Admin
+          </a>
+        </span>
+        <div class="dropdown">
+          <button class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="bi bi-person me-1"></i><span id="navUsername"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="history.html"><i class="bi bi-clock-history me-2"></i>My History</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -38,7 +58,6 @@
           <div class="card-body p-4">
             <h5 class="card-title mb-4"><i class="bi bi-upload me-2 text-success"></i>Upload Leaf Image</h5>
 
-            <!-- Drop Zone -->
             <div class="drop-zone mb-4" id="dropZone">
               <div class="drop-zone-content" id="dropZoneContent">
                 <i class="bi bi-image text-success fs-1 mb-3 d-block"></i>
@@ -53,13 +72,11 @@
 
             <input type="file" id="fileInput" accept="image/*" class="d-none" />
 
-            <!-- Camera Button -->
             <button class="btn btn-outline-secondary w-100 mb-3" id="cameraBtn">
               <i class="bi bi-camera me-2"></i>Take a Photo
             </button>
             <input type="file" id="cameraInput" accept="image/*" capture="environment" class="d-none" />
 
-            <!-- Analyze Button -->
             <button class="btn btn-success w-100 btn-lg" id="analyzeBtn" disabled>
               <i class="bi bi-cpu me-2"></i>Analyze Plant
             </button>
@@ -73,27 +90,21 @@
           <div class="card-body p-4">
             <h5 class="card-title mb-4"><i class="bi bi-clipboard2-pulse me-2 text-success"></i>Analysis Results</h5>
 
-            <!-- Empty State -->
             <div id="emptyState" class="text-center py-5">
               <i class="bi bi-search text-muted fs-1 mb-3 d-block"></i>
               <p class="text-muted">Upload a leaf image to see the analysis results here.</p>
             </div>
 
-            <!-- Loading State -->
             <div id="loadingState" class="text-center py-5 d-none">
               <div class="spinner-border text-success mb-3" role="status"></div>
               <p class="text-muted">Analyzing your plant...</p>
             </div>
 
-            <!-- Results -->
             <div id="resultsState" class="d-none">
-
-              <!-- Health Badge -->
               <div class="text-center mb-4">
                 <span id="healthBadge" class="badge fs-6 px-3 py-2"></span>
               </div>
 
-              <!-- Plant Info -->
               <div class="result-item mb-3">
                 <div class="result-label"><i class="bi bi-flower1 me-2"></i>Plant Species</div>
                 <div class="result-value" id="plantName"></div>
@@ -104,7 +115,6 @@
                 <div class="result-value" id="diseaseName"></div>
               </div>
 
-              <!-- Confidence -->
               <div class="mb-4">
                 <div class="d-flex justify-content-between mb-1">
                   <small class="text-muted">Confidence</small>
@@ -115,19 +125,16 @@
                 </div>
               </div>
 
-              <!-- Disease Info -->
               <div id="diseaseInfo" class="alert alert-warning d-none">
                 <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Disease Information</h6>
                 <div id="diseaseInfoText"></div>
               </div>
 
-              <!-- Healthy Info -->
               <div id="healthyInfo" class="alert alert-success d-none">
                 <i class="bi bi-check-circle me-2"></i>
                 <strong>Great news!</strong> Your plant appears healthy. Keep up the good care!
               </div>
 
-              <!-- Try Again -->
               <button class="btn btn-outline-success w-100 mt-2" id="tryAgainBtn">
                 <i class="bi bi-arrow-counterclockwise me-2"></i>Analyze Another
               </button>
@@ -140,12 +147,23 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
   <footer class="text-center py-4 text-muted small">
-    <p class="mb-0">PlantCare AI &mdash; Built for farmers, gardeners, and researchers &mdash; KNUST CSM 366</p>
+    <p class="mb-0">PlantCare AI &mdash; Built for farmers, gardeners, and researchers</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
+  <script>
+    // Require auth
+    requireAuth();
+
+    // Show user info in navbar
+    const user = getUser();
+    if (user) {
+      document.getElementById('navUsername').textContent = user.full_name.split(' ')[0];
+      if (user.is_admin) document.getElementById('adminLink').classList.remove('d-none');
+    }
+  </script>
 </body>
 </html>
