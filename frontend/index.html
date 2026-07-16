@@ -80,6 +80,12 @@
             <button class="btn btn-success w-100 btn-lg" id="analyzeBtn" disabled>
               <i class="bi bi-cpu me-2"></i>Analyze Plant
             </button>
+
+            <!-- Supported plants note -->
+            <p class="text-muted text-center mt-3 mb-0" style="font-size:0.78rem;">
+              <i class="bi bi-info-circle me-1"></i>
+              Currently supports <strong>Tomato, Potato, and Pepper</strong> leaves only.
+            </p>
           </div>
         </div>
       </div>
@@ -101,38 +107,48 @@
             </div>
 
             <div id="resultsState" class="d-none">
-              <div class="text-center mb-4">
-                <span id="healthBadge" class="badge fs-6 px-3 py-2"></span>
+
+              <!-- Unknown plant warning -->
+              <div id="unknownPlant" class="alert alert-danger d-none">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                <strong>Plant not recognized.</strong> This leaf doesn't match any supported plant. Please upload a <strong>Tomato, Potato, or Pepper</strong> leaf for accurate results.
               </div>
 
-              <div class="result-item mb-3">
-                <div class="result-label"><i class="bi bi-flower1 me-2"></i>Plant Species</div>
-                <div class="result-value" id="plantName"></div>
-              </div>
-
-              <div class="result-item mb-3">
-                <div class="result-label"><i class="bi bi-bug me-2"></i>Condition</div>
-                <div class="result-value" id="diseaseName"></div>
-              </div>
-
-              <div class="mb-4">
-                <div class="d-flex justify-content-between mb-1">
-                  <small class="text-muted">Confidence</small>
-                  <small class="fw-bold" id="confidenceText"></small>
+              <!-- Normal results (hidden when unknown) -->
+              <div id="knownPlantResults">
+                <div class="text-center mb-4">
+                  <span id="healthBadge" class="badge fs-6 px-3 py-2"></span>
                 </div>
-                <div class="progress" style="height: 8px;">
-                  <div class="progress-bar bg-success" id="confidenceBar" role="progressbar"></div>
+
+                <div class="result-item mb-3">
+                  <div class="result-label"><i class="bi bi-flower1 me-2"></i>Plant Species</div>
+                  <div class="result-value" id="plantName"></div>
                 </div>
-              </div>
 
-              <div id="diseaseInfo" class="alert alert-warning d-none">
-                <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Disease Information</h6>
-                <div id="diseaseInfoText"></div>
-              </div>
+                <div class="result-item mb-3">
+                  <div class="result-label"><i class="bi bi-bug me-2"></i>Condition</div>
+                  <div class="result-value" id="diseaseName"></div>
+                </div>
 
-              <div id="healthyInfo" class="alert alert-success d-none">
-                <i class="bi bi-check-circle me-2"></i>
-                <strong>Great news!</strong> Your plant appears healthy. Keep up the good care!
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between mb-1">
+                    <small class="text-muted">Confidence</small>
+                    <small class="fw-bold" id="confidenceText"></small>
+                  </div>
+                  <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-success" id="confidenceBar" role="progressbar"></div>
+                  </div>
+                </div>
+
+                <div id="diseaseInfo" class="alert alert-warning d-none">
+                  <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Disease Information</h6>
+                  <div id="diseaseInfoText"></div>
+                </div>
+
+                <div id="healthyInfo" class="alert alert-success d-none">
+                  <i class="bi bi-check-circle me-2"></i>
+                  <strong>Great news!</strong> Your plant appears healthy. Keep up the good care!
+                </div>
               </div>
 
               <button class="btn btn-outline-success w-100 mt-2" id="tryAgainBtn">
@@ -155,10 +171,7 @@
   <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script>
-    // Require auth
     requireAuth();
-
-    // Show user info in navbar
     const user = getUser();
     if (user) {
       document.getElementById('navUsername').textContent = user.full_name.split(' ')[0];

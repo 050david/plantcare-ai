@@ -1,3 +1,5 @@
+const CONFIDENCE_THRESHOLD = 70;
+
 const fileInput = document.getElementById('fileInput');
 const cameraInput = document.getElementById('cameraInput');
 const cameraBtn = document.getElementById('cameraBtn');
@@ -70,18 +72,13 @@ analyzeBtn.addEventListener('click', async () => {
   try {
     const response = await fetch(`${API_URL}/predict`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${getToken()}`
-      },
+      headers: { 'Authorization': `Bearer ${getToken()}` },
       body: formData
     });
 
-    if (response.status === 401) {
-      logout();
-      return;
-    }
-
+    if (response.status === 401) { logout(); return; }
     if (!response.ok) throw new Error('Prediction failed');
+
     const data = await response.json();
     showResults(data);
   } catch (err) {
@@ -118,6 +115,20 @@ function showResults(data) {
   document.getElementById('emptyState').classList.add('d-none');
   document.getElementById('loadingState').classList.add('d-none');
   document.getElementById('resultsState').classList.remove('d-none');
+
+  const unknownEl = document.getElementById('unknownPlant');
+  const knownEl = document.getElementById('knownPlantResults');
+
+  // Confidence threshold check
+  if (data.confidence < CONFIDENCE_THRESHOLD) {
+    unknownEl.classList.remove('d-none');
+    knownEl.classList.add('d-none');
+    analyzeBtn.disabled = false;
+    return;
+  }
+
+  unknownEl.classList.add('d-none');
+  knownEl.classList.remove('d-none');
 
   const badge = document.getElementById('healthBadge');
   if (data.is_healthy) {
