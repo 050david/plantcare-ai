@@ -1,0 +1,92 @@
+{
+  "0": {
+    "class_name": "Pepper__bell___Bacterial_spot",
+    "plant": "Pepper  bell",
+    "disease": "Bacterial spot",
+    "is_healthy": false
+  },
+  "1": {
+    "class_name": "Pepper__bell___healthy",
+    "plant": "Pepper  bell",
+    "disease": "healthy",
+    "is_healthy": true
+  },
+  "2": {
+    "class_name": "Potato___Early_blight",
+    "plant": "Potato",
+    "disease": "Early blight",
+    "is_healthy": false
+  },
+  "3": {
+    "class_name": "Potato___Late_blight",
+    "plant": "Potato",
+    "disease": "Late blight",
+    "is_healthy": false
+  },
+  "4": {
+    "class_name": "Potato___healthy",
+    "plant": "Potato",
+    "disease": "healthy",
+    "is_healthy": true
+  },
+  "5": {
+    "class_name": "Tomato_Bacterial_spot",
+    "plant": "Tomato",
+    "disease": "Bacterial spot",
+    "is_healthy": false
+  },
+  "6": {
+    "class_name": "Tomato_Early_blight",
+    "plant": "Tomato",
+    "disease": "Early blight",
+    "is_healthy": false
+  },
+  "7": {
+    "class_name": "Tomato_Late_blight",
+    "plant": "Tomato",
+    "disease": "Late blight",
+    "is_healthy": false
+  },
+  "8": {
+    "class_name": "Tomato_Leaf_Mold",
+    "plant": "Tomato",
+    "disease": "Leaf Mold",
+    "is_healthy": false
+  },
+  "9": {
+    "class_name": "Tomato_Septoria_leaf_spot",
+    "plant": "Tomato",
+    "disease": "Septoria leaf spot",
+    "is_healthy": false
+  },
+  "10": {
+    "class_name": "Tomato_Spider_mites_Two_spotted_spider_mite",
+    "plant": "Tomato",
+    "disease": "Spider mites Two spotted spider mite",
+    "is_healthy": false
+  },
+  "11": {
+    "class_name": "Tomato__Target_Spot",
+    "plant": "Tomato",
+    "disease": "Target Spot",
+    "is_healthy": false
+  },
+  "12": {
+    "class_name": "Tomato__Tomato_YellowLeaf__Curl_Virus",
+    "plant": "Tomato",
+    "disease": "Tomato YellowLeaf",
+    "is_healthy": false
+  },
+  "13": {
+    "class_name": "Tomato__Tomato_mosaic_virus",
+    "plant": "Tomato",
+    "disease": "Tomato mosaic virus",
+    "is_healthy": false
+  },
+  "14": {
+    "class_name": "Tomato_healthy",
+    "plant": "Tomato",
+    "disease": "healthy",
+    "is_healthy": true
+  }
+}

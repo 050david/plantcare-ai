@@ -1,0 +1,140 @@
+:root {
+  --green: #198754;
+  --green-light: #d1e7dd;
+  --bg: #f8fdf9;
+  --card-bg: #ffffff;
+  --border: #dee2e6;
+  --text: #212529;
+  --muted: #6c757d;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* NAVBAR */
+.navbar {
+  background-color: #0f1f13;
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.navbar-brand {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #0f1f13 0%, #1a3a20 100%);
+  color: white;
+  padding: 3.5rem 0;
+}
+
+.hero .text-muted {
+  color: #a8c5aa !important;
+}
+
+/* CARDS */
+.card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* DROP ZONE */
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafffe;
+  overflow: hidden;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+  border-color: var(--green);
+  background: var(--green-light);
+}
+
+.drop-zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* RESULTS */
+.result-item {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.result-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
+.result-value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+/* PROGRESS */
+.progress {
+  border-radius: 50px;
+  background: #e9ecef;
+}
+
+.progress-bar {
+  border-radius: 50px;
+  transition: width 0.6s ease;
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 576px) {
+  .hero {
+    padding: 2rem 0;
+  }
+  .hero h1 {
+    font-size: 1.6rem;
+  }
+}
