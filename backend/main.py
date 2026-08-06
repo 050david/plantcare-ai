@@ -30,7 +30,7 @@ app.add_middleware(
 
 create_tables()
 
-NUM_CLASSES = 15  # Update to 38 when new model is ready
+NUM_CLASSES = 38
 
 
 def build_model():
@@ -69,10 +69,10 @@ def parse_class_name(class_name):
 
 print("Building model...")
 model = build_model()
-model.load_weights("plantcare_weights.weights.h5")
+model.load_weights("plantcare_weights_38.weights.h5")
 print("Weights loaded!")
 
-with open("class_info.json") as f:
+with open("class_info_38.json") as f:
     class_info = json.load(f)
 
 with open("disease_knowledge_base.json") as f:
