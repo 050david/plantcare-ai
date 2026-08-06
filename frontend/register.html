@@ -24,8 +24,8 @@
       <div class="col-md-5 col-lg-4 fade-up">
 
         <div class="text-center mb-4">
-          <div class="mb-3" style="width:56px;height:56px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;margin:0 auto;">
-            <i class="bi bi-person-plus-fill" style="color:var(--green-deep);font-size:1.3rem;"></i>
+          <div class="mb-3" style="width:64px;height:64px;border-radius:50%;background:var(--green-deep);display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 4px 12px rgba(45,106,79,0.3);">
+            <i class="bi bi-leaf-fill" style="color:#fff;font-size:1.6rem;"></i>
           </div>
           <h4 class="fw-bold mb-1" style="font-family:'Playfair Display',serif;">Create an account</h4>
           <p style="color:var(--muted);font-size:0.88rem;">Join PlantCare AI and start monitoring your plants</p>
@@ -46,7 +46,12 @@
 
           <div class="mb-4">
             <label class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Min. 6 characters" />
+            <div class="input-group">
+              <input type="password" class="form-control" id="password" placeholder="Min. 6 characters" />
+              <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1">
+                <i class="bi bi-eye" id="toggleIcon"></i>
+              </button>
+            </div>
           </div>
 
           <button class="btn btn-success w-100" id="registerBtn">
@@ -104,6 +109,19 @@
         registerBtn.disabled = false;
         registerSpinner.classList.add('d-none');
         registerText.textContent = 'Create Account';
+      }
+    });
+  </script>
+  <script>
+    document.getElementById('togglePassword').addEventListener('click', () => {
+      const pwd = document.getElementById('password');
+      const icon = document.getElementById('toggleIcon');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+      } else {
+        pwd.type = 'password';
+        icon.className = 'bi bi-eye';
       }
     });
   </script>
