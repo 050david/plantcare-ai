@@ -28,10 +28,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create DB tables on startup
 create_tables()
 
-NUM_CLASSES = 15
+NUM_CLASSES = 15  # Update to 38 when new model is ready
 
 
 def build_model():
@@ -76,7 +75,16 @@ print("Weights loaded!")
 with open("class_info.json") as f:
     class_info = json.load(f)
 
+with open("disease_knowledge_base.json") as f:
+    knowledge_base = json.load(f)
+
 print(f"Ready! {len(class_info)} classes loaded.")
+
+
+def get_disease_info(class_name):
+    if class_name in knowledge_base:
+        return knowledge_base[class_name]
+    return None
 
 
 def preprocess_image(image_bytes: bytes) -> np.ndarray:
@@ -86,25 +94,12 @@ def preprocess_image(image_bytes: bytes) -> np.ndarray:
     return np.expand_dims(img_array, axis=0)
 
 
-# --- Pydantic Schemas ---
 class RegisterRequest(BaseModel):
     full_name: str
     email: EmailStr
     password: str
 
 
-class UserResponse(BaseModel):
-    id: int
-    full_name: str
-    email: str
-    is_admin: bool
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-# --- Auth Routes ---
 @app.get("/")
 def root():
     return {"status": "PlantCare AI is running"}
@@ -156,7 +151,6 @@ def get_me(current_user: User = Depends(get_current_user)):
     }
 
 
-# --- Predict Route ---
 @app.post("/predict")
 async def predict(
     file: UploadFile = File(...),
@@ -176,7 +170,8 @@ async def predict(
     info = class_info[str(predicted_idx)]
     plant, disease, is_healthy = parse_class_name(info['class_name'])
 
-    # Save scan to history
+    disease_info = get_disease_info(info['class_name'])
+
     scan = Scan(
         user_id=current_user.id,
         plant=plant,
@@ -188,7 +183,7 @@ async def predict(
     db.add(scan)
     db.commit()
 
-    return {
+    result = {
         "plant": plant,
         "disease": disease,
         "is_healthy": is_healthy,
@@ -196,8 +191,15 @@ async def predict(
         "class_name": info['class_name']
     }
 
+    if disease_info:
+        result["causes"] = disease_info.get("causes")
+        result["symptoms"] = disease_info.get("symptoms")
+        result["treatment"] = disease_info.get("treatment", [])
+        result["prevention"] = disease_info.get("prevention")
 
-# --- Scan History ---
+    return result
+
+
 @app.get("/history")
 def get_history(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     scans = db.query(Scan).filter(Scan.user_id == current_user.id).order_by(Scan.created_at.desc()).all()
@@ -212,7 +214,6 @@ def get_history(current_user: User = Depends(get_current_user), db: Session = De
     } for s in scans]
 
 
-# --- Admin Routes ---
 @app.get("/admin/users")
 def get_all_users(current_user: User = Depends(get_current_admin), db: Session = Depends(get_db)):
     users = db.query(User).all()

@@ -1,17 +1,5 @@
 const CONFIDENCE_THRESHOLD = 70;
 
-const diseaseInfo = {
-  'Bacterial spot': 'Caused by Xanthomonas bacteria. Remove infected leaves, avoid overhead watering, and apply copper-based bactericide.',
-  'Early blight': 'Caused by Alternaria fungus. Remove affected leaves, improve air circulation, and apply fungicide.',
-  'Late blight': 'Caused by Phytophthora infestans. Destroy infected plants, avoid wet foliage, apply fungicide immediately.',
-  'Leaf Mold': 'Caused by Passalora fulva fungus. Improve ventilation, reduce humidity, apply fungicide.',
-  'Septoria leaf spot': 'Caused by Septoria lycopersici. Remove infected leaves, avoid wetting foliage, apply fungicide.',
-  'Spider mites Two spotted spider mite': 'Caused by mite infestation. Apply miticide or neem oil, increase humidity around plants.',
-  'Target Spot': 'Caused by Corynespora cassiicola fungus. Remove infected tissue and apply appropriate fungicide.',
-  'Tomato YellowLeaf Curl Virus': 'Viral disease spread by whiteflies. Remove infected plants, control whitefly population.',
-  'Tomato mosaic virus': 'Viral disease. Remove infected plants, disinfect tools, control aphids.',
-};
-
 document.addEventListener('DOMContentLoaded', () => {
 
   const fileInput = document.getElementById('fileInput');
@@ -150,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const diseaseInfoEl = document.getElementById('diseaseInfo');
     const healthyInfoEl = document.getElementById('healthyInfo');
-    const diseaseInfoText = document.getElementById('diseaseInfoText');
 
     if (data.is_healthy) {
       diseaseInfoEl.classList.add('d-none');
@@ -158,8 +145,34 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       healthyInfoEl.classList.add('d-none');
       diseaseInfoEl.classList.remove('d-none');
-      const info = diseaseInfo[data.disease] || 'Consult an agricultural expert for treatment recommendations.';
-      diseaseInfoText.textContent = info;
+
+      let infoHTML = '';
+
+      if (data.causes) {
+        infoHTML += `<div class="mb-2"><strong>Cause:</strong> ${data.causes}</div>`;
+      }
+
+      if (data.symptoms) {
+        infoHTML += `<div class="mb-2"><strong>Symptoms:</strong> ${data.symptoms}</div>`;
+      }
+
+      if (data.treatment && data.treatment.length > 0) {
+        infoHTML += `<div class="mb-2"><strong>Treatment:</strong><ul class="mt-1 mb-0 ps-3">`;
+        data.treatment.forEach(t => {
+          infoHTML += `<li style="font-size:0.82rem; margin-bottom:0.25rem;">${t}</li>`;
+        });
+        infoHTML += `</ul></div>`;
+      }
+
+      if (data.prevention) {
+        infoHTML += `<div><strong>Prevention:</strong> ${data.prevention}</div>`;
+      }
+
+      if (!infoHTML) {
+        infoHTML = 'Consult an agricultural expert for treatment recommendations.';
+      }
+
+      document.getElementById('diseaseInfoText').innerHTML = infoHTML;
     }
 
     analyzeBtn.disabled = false;
