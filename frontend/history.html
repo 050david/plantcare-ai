@@ -6,11 +6,12 @@
   <title>PlantCare AI – Scan History</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:var(--green-deep); position:relative;">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
         <i class="bi bi-leaf-fill" style="color:var(--green-mid);"></i>
@@ -18,7 +19,7 @@
       </a>
       <div class="d-flex align-items-center gap-3">
         <a href="index.html" class="text-white text-decoration-none small">
-          <i class="bi bi-cpu me-1"></i>Analyze
+          <i class="bi bi-arrow-left me-1"></i>Back
         </a>
         <div class="dropdown">
           <button class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown">
@@ -95,7 +96,7 @@
             <div class="history-card p-3">
               <div class="d-flex justify-content-between align-items-start mb-3">
                 <span class="badge ${scan.is_healthy ? 'bg-success' : 'bg-warning'}">
-                  ${scan.is_healthy ? '✓ Healthy' : '⚠ Disease'}
+                  <i class="bi ${scan.is_healthy ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-1"></i>${scan.is_healthy ? 'Healthy' : 'Disease'}
                 </span>
                 <small style="color:var(--muted);font-size:0.75rem;">${new Date(scan.created_at).toLocaleDateString('en-GB')}</small>
               </div>
