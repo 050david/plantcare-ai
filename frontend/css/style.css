@@ -508,6 +508,43 @@ body {
   transform: translateY(-2px);
 }
 
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-sm);
+}
+
+.status-chip i { font-size: 0.85rem; }
+
+.status-chip-healthy {
+  background: var(--green-light);
+  color: var(--green-deep);
+}
+
+.status-chip-disease {
+  background: var(--earth-light);
+  color: var(--earth);
+}
+
+.plant-icon-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--green-deep);
+  flex-shrink: 0;
+}
+
 /* ---- NAVBAR DROPDOWN ---- */
 .navbar .dropdown-menu {
   background: rgba(15, 30, 20, 0.95);

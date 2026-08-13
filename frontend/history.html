@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
 </head>
 <body>
 
@@ -37,7 +37,8 @@
     <div class="d-flex justify-content-between align-items-center mb-4 fade-up">
       <div>
         <p class="mb-1" style="font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;">Your Activity</p>
-        <h4 class="fw-bold mb-0" style="font-family:'Playfair Display',serif;">Scan History</h4>
+        <h4 class="fw-bold mb-1" style="font-family:'Playfair Display',serif;">Scan History</h4>
+        <p id="historySummary" class="mb-0" style="font-size:0.82rem;color:var(--muted);"></p>
       </div>
       <a href="index.html" class="btn btn-success btn-sm">
         <i class="bi bi-plus me-1"></i>New Scan
@@ -88,30 +89,45 @@
           return;
         }
 
+        const diseaseCount = scans.filter(s => !s.is_healthy).length;
+        document.getElementById('historySummary').textContent =
+          `${scans.length} scan${scans.length !== 1 ? 's' : ''} · ${diseaseCount} disease${diseaseCount !== 1 ? 's' : ''} detected`;
+
+        function confidenceTier(pct, healthy) {
+          if (healthy) return { barColor: 'var(--green-mid)', accent: 'var(--green-mid)' };
+          if (pct >= 85) return { barColor: 'var(--earth)', accent: 'var(--earth)' };
+          if (pct >= 50) return { barColor: '#C6842A', accent: '#C6842A' };
+          return { barColor: 'var(--muted)', accent: 'var(--border)' };
+        }
+
         const list = document.getElementById('historyList');
         list.classList.remove('d-none');
 
-        list.innerHTML = scans.map((scan, i) => `
+        list.innerHTML = scans.map((scan, i) => {
+          const tier = confidenceTier(scan.confidence, scan.is_healthy);
+          const tintBg = scan.is_healthy ? 'var(--green-light)' : 'var(--earth-light)';
+          return `
           <div class="col-md-6 col-lg-4 fade-up" style="animation-delay:${i * 0.05}s;">
-            <div class="history-card p-3">
+            <div class="history-card p-3" style="border-left:3px solid ${tier.accent}; background:linear-gradient(180deg, ${tintBg} 0%, var(--surface) 90px);">
               <div class="d-flex justify-content-between align-items-start mb-3">
-                <span class="badge ${scan.is_healthy ? 'bg-success' : 'bg-warning'}">
-                  <i class="bi ${scan.is_healthy ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-1"></i>${scan.is_healthy ? 'Healthy' : 'Disease'}
+                <span class="status-chip ${scan.is_healthy ? 'status-chip-healthy' : 'status-chip-disease'}">
+                  <i class="bi ${scan.is_healthy ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'}"></i>${scan.is_healthy ? 'Healthy' : 'Disease'}
                 </span>
                 <small style="color:var(--muted);font-size:0.75rem;">${new Date(scan.created_at).toLocaleDateString('en-GB')}</small>
               </div>
-              <p class="fw-bold mb-0" style="font-size:0.95rem;">${scan.plant}</p>
+              <p class="fw-bold mb-0" style="font-size:0.98rem;">${scan.plant}</p>
               <p style="color:var(--muted);font-size:0.82rem;margin-bottom:0.75rem;">${scan.disease}</p>
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <small style="color:var(--muted);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Confidence</small>
-                <small class="fw-bold" style="font-size:0.78rem;color:var(--green-deep);">${scan.confidence}%</small>
+                <small class="fw-bold" style="font-size:0.78rem;color:${tier.barColor};">${scan.confidence}%</small>
               </div>
               <div class="progress" style="height:4px;">
-                <div class="progress-bar" style="width:${scan.confidence}%"></div>
+                <div class="progress-bar" style="width:${scan.confidence}%;background:${tier.barColor};"></div>
               </div>
             </div>
           </div>
-        `).join('');
+        `;
+        }).join('');
 
       } catch (err) {
         document.getElementById('loadingState').classList.add('d-none');
