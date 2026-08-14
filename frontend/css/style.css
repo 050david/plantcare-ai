@@ -644,3 +644,7 @@ footer {
     transition: none !important;
   }
 }
+/* ---- SMOOTH SCROLL ---- */
+html {
+  scroll-behavior: smooth;
+}
