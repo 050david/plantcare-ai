@@ -5,7 +5,7 @@ An AI-powered plant disease detection and health advisory web application.
 ## What it does
 - Upload a photo of a plant leaf
 - AI identifies the plant species and detects diseases
-- Shows confidence score, disease info, and treatment recommendations
+- Shows confidence score, causes, symptoms, treatment recommendations, and prevention advice
 - Saves scan history per user
 - Admin dashboard for managing users and scans
 
@@ -17,10 +17,10 @@ An AI-powered plant disease detection and health advisory web application.
 
 ### Prerequisites
 - Python 3.9+
-- The model weights file (ask David or re-train using the Colab notebook)
+- The model weights file: `plantcare_weights_38.weights.h5` (ask David or re-train using the Colab notebook)
 
 ### 1. Get the model weights
-Place `plantcare_weights.weights.h5` in the `backend/` folder.
+Place `plantcare_weights_38.weights.h5` in the `backend/` folder.
 
 ### 2. Backend setup
 cd backend
@@ -39,9 +39,10 @@ Open http://localhost:3001 in your browser.
 
 ## Model Info
 - Architecture: MobileNetV2 (transfer learning)
-- Dataset: PlantVillage (20,639 images, 15 classes)
-- Validation accuracy: 95.34%
-- Classes: Tomato (9 diseases), Potato (3), Pepper (2)
+- Dataset: New Plant Diseases Dataset — Kaggle (vipoooool/new-plant-diseases-dataset)
+- Training images: 70,295 across 38 disease classes
+- Validation accuracy: 93.56% (Phase 1), fine-tuning in progress
+- Supported species: Apple, Blueberry, Cherry, Corn, Grape, Orange, Peach, Pepper, Potato, Raspberry, Soybean, Squash, Strawberry, Tomato
 
 ## Team
 - David Oppong Bawuah
@@ -52,27 +53,21 @@ Open http://localhost:3001 in your browser.
 ## Windows Setup
 
 ### Backend
-```bash
 git clone https://github.com/050david/plantcare-ai.git
 cd plantcare-ai/backend
 python -m venv venv
 venv\Scripts\activate
 pip install fastapi uvicorn tensorflow pillow python-multipart "python-jose[cryptography]" "passlib[bcrypt]==4.0.1" sqlalchemy "pydantic[email]"
-```
 
-Place `plantcare_weights.weights.h5` in the `backend/` folder (get from David).
+Place `plantcare_weights_38.weights.h5` in the `backend/` folder (get from David).
 
-```bash
 uvicorn main:app --reload
-```
 
 ### Frontend
-```bash
 cd frontend
 python -m http.server 3001
-```
 
-Open `http://localhost:3001` in your browser.
+Open http://localhost:3001 in your browser.
 
 ### Notes
 - Use `python` instead of `python3`
