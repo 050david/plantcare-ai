@@ -155,7 +155,7 @@
           <td style="color:var(--muted);">${u.email}</td>
           <td>${u.scan_count}</td>
           <td style="color:var(--muted);">${new Date(u.created_at).toLocaleDateString('en-GB')}</td>
-          <td><span class="badge ${u.is_admin ? 'bg-danger' : 'bg-secondary'}" style="font-size:0.72rem;">${u.is_admin ? 'Admin' : 'User'}</span></td>
+          <td><span class="status-chip ${u.is_admin ? 'status-chip-disease' : 'status-chip-healthy'}"><i class="bi ${u.is_admin ? 'bi-shield-fill' : 'bi-person-fill'}"></i>${u.is_admin ? 'Admin' : 'User'}</span></td>
         </tr>
       `).join('');
 
@@ -170,13 +170,20 @@
       document.getElementById('scansLoading').classList.add('d-none');
       document.getElementById('scansTable').classList.remove('d-none');
 
+      function confidenceTier(pct, healthy) {
+        if (healthy) return 'var(--green-mid)';
+        if (pct >= 85) return 'var(--earth)';
+        if (pct >= 50) return '#C6842A';
+        return 'var(--muted)';
+      }
+
       document.getElementById('scansBody').innerHTML = scans.map((s, i) => `
         <tr>
           <td style="color:var(--muted);">${i + 1}</td>
           <td class="fw-medium">${s.plant}</td>
           <td style="color:var(--muted);">${s.disease}</td>
-          <td><span class="badge ${s.is_healthy ? 'bg-success' : 'bg-warning'}" style="font-size:0.72rem;">${s.is_healthy ? 'Healthy' : 'Disease'}</span></td>
-          <td>${s.confidence}%</td>
+          <td><span class="status-chip ${s.is_healthy ? 'status-chip-healthy' : 'status-chip-disease'}"><i class="bi ${s.is_healthy ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'}"></i>${s.is_healthy ? 'Healthy' : 'Disease'}</span></td>
+          <td class="fw-bold" style="color:${confidenceTier(s.confidence, s.is_healthy)};">${s.confidence}%</td>
           <td style="color:var(--muted);">${new Date(s.created_at).toLocaleDateString('en-GB')}</td>
         </tr>
       `).join('');
